@@ -1,79 +1,85 @@
 # Arquitectura de producción web
+
 ## Objetivos arquitectónicos
 
 La infraestructura web de producción se ha diseñado en torno a cuatro objetivos principales:
 
-Separar la infraestructura expuesta a Internet de las cargas de trabajo de las aplicaciones.
-Evitar exponer los servidores de aplicaciones directamente a la Internet pública.
-Permitir que varios servicios web compartan el mismo punto de entrada.
-Mantener una arquitectura sencilla que pueda ampliarse a medida que crezca el laboratorio doméstico (*homelab*).
-# Arquitectura lógica
+* Separar la infraestructura expuesta a Internet de las cargas de trabajo de las aplicaciones.
+* Evitar exponer los servidores de aplicaciones directamente a Internet.
+* Permitir que varios servicios web compartan el mismo punto de entrada.
+* Mantener una arquitectura sencilla que pueda ampliarse a medida que crezca el laboratorio doméstico (*homelab*).
 
-El entorno de producción se divide en dos cargas de trabajo principales:
+## Arquitectura lógica
 
-# Pasarela (*Gateway*)
+El entorno de producción se divide inicialmente en dos cargas de trabajo principales:
 
-La pasarela se encarga de recibir el tráfico de Cloudflare y de enrutar las solicitudes hacia los servicios internos.
+1. **Pasarela (*Gateway*)**
+2. **Carga de trabajo de la aplicación**
 
-# Responsabilidades:
+### Pasarela (*Gateway*)
 
-Mantener la conexión del túnel de Cloudflare (*Cloudflare Tunnel*).
-Terminar y enrutar las solicitudes HTTP/HTTPS entrantes.
-Actuar como punto de entrada único para los servicios publicados externamente.
-Reenviar las solicitudes a los servidores de aplicaciones internos.
+La pasarela se encarga de recibir el tráfico proveniente de Cloudflare y enrutar las solicitudes hacia los servicios internos.
 
-Diagrama de arquitectura
-                     Internet público
-                            │
-                            ▼
-                    ┌──────────────┐
-                    │  Cloudflare   │
-                    └───────┬──────┘
-                            │
-                    Conexión de túnel
-                            │
-                            ▼
-                  ┌──────────────────┐
-                  │     Pasarela     │
-                  │      LXC         │
-                  │                  │
-                  │ cloudflared      │
-                  │ Nginx Proxy      │
-                  │ Manager          │
-                  └────────┬─────────┘
-                           │
-                     Red interna
-                           │
-                           ▼
-                  ┌──────────────────┐
-                  │    Portafolio    │
-                  │       LXC        │
-                  │                  │
-                  │      Nginx       │
-                  └──────────────────┘
+#### Responsabilidades
 
+* Mantener la conexión del túnel de Cloudflare (*Cloudflare Tunnel*).
+* Recibir y enrutar las solicitudes HTTP/HTTPS entrantes.
+* Actuar como punto de entrada único para los servicios publicados externamente.
+* Reenviar las solicitudes a los servidores de aplicaciones internos.
 
+### Diagrama de arquitectura
 
-# Decisiones de arquitectura
-## Pasarela dedicada
+```text
+                         Internet público
+                                │
+                                ▼
+                       ┌────────────────┐
+                       │   Cloudflare   │
+                       └───────┬────────┘
+                               │
+                     Cloudflare Tunnel
+                               │
+                               ▼
+                    ┌────────────────────┐
+                    │      Pasarela      │
+                    │        LXC         │
+                    │                    │
+                    │    cloudflared     │
+                    │  Nginx Proxy Mgr   │
+                    └─────────┬──────────┘
+                              │
+                         Red interna
+                              │
+                              ▼
+                    ┌────────────────────┐
+                    │     Portafolio     │
+                    │        LXC         │
+                    │                    │
+                    │       Nginx        │
+                    └────────────────────┘
+```
+
+## Decisiones de arquitectura
+
+### Pasarela dedicada
 
 El proxy inverso y el cliente de Cloudflare Tunnel están separados de la carga de trabajo del portafolio.
 
-Esto permite que la puerta de enlace (gateway) actúe como punto de entrada común para futuros servicios web, sin necesidad de que cada aplicación gestione de forma independiente la conectividad externa.
+Esto permite que la puerta de enlace (*gateway*) actúe como punto de entrada común para futuros servicios web, sin necesidad de que cada aplicación gestione de forma independiente la conectividad externa.
 
-## Carga de trabajo de la aplicación dedicada
+### Carga de trabajo de la aplicación dedicada
 
-La aplicación "Portfolio" se aloja en un contenedor LXC independiente, en lugar de ejecutarse directamente en la puerta de enlace.
+La aplicación **Portafolio** se aloja en un contenedor LXC independiente, en lugar de ejecutarse directamente en la puerta de enlace.
 
 Esto proporciona separación de cargas de trabajo y permite gestionar, reemplazar o reconstruir la aplicación independientemente de la capa de acceso externo.
 
-## Sin exposición directa de entrada
+### Sin exposición directa de entrada
 
-La arquitectura inicial no requiere redirección directa de puertos de entrada desde el router hacia el laboratorio doméstico (homelab).
+La arquitectura inicial no requiere redirección directa de puertos de entrada desde el router hacia el laboratorio doméstico (*homelab*).
 
-La conectividad externa se proporciona a través de Cloudflare Tunnel, lo que reduce el número de servicios expuestos directamente a la Internet pública.
+La conectividad externa se proporciona a través de Cloudflare Tunnel, lo que reduce el número de servicios expuestos directamente a Internet.
 
-## Escalabilidad
+### Escalabilidad
 
 La arquitectura está diseñada deliberadamente en torno a una única puerta de enlace.
 
@@ -81,44 +87,58 @@ Es posible añadir servicios adicionales detrás de la puerta de enlace sin modi
 
 Por ejemplo:
 
-                 Puerta de enlace
-                        │
-           ┌────────────┼────────────┐
-           ▼            ▼            ▼
-       Portfolio     Sitio web 2  Sitio web 3
-          LXC           LXC          LXC
+```text
+                         Puerta de enlace
+                                │
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+              ▼                 ▼                 ▼
+        ┌───────────┐     ┌───────────┐     ┌───────────┐
+        │ Portafolio│     │ Sitio web │     │ Sitio web │
+        │    LXC    │     │     2     │     │     3     │
+        └───────────┘     │    LXC    │     │    LXC    │
+                          └───────────┘     └───────────┘
+```
 
 Esto permite que el entorno de producción crezca de manera incremental, manteniendo al mismo tiempo un punto de entrada a la red coherente.
 
+## Planteamiento a medio y largo plazo
 
+La infraestructura se plantea de forma modular y escalable con el objetivo de poder alojar, potencialmente, páginas web ligeras y ofrecer servicios de hosting para páginas web enfocadas en la exposición pública de productos y servicios de terceros.
 
+La arquitectura planteada a medio y largo plazo sería similar a la siguiente:
 
-## planteamiento a medio-largo plazo
- Utilizar la infraestructura previamente planteada escalable para potencialmente alojar paginas web ligeras y ofrecer un servicio de hosting para paginas web enfocadas en la exposicion publica de productos y servicios de terceros.
- 
+```text
+                              INTERNET
+                                  │
+                                  ▼
+                             Cloudflare
+                                  │
+                                  ▼
+                        Cloudflare Tunnel
+                                  │
+                                  ▼
+                    ┌────────────────────────┐
+                    │      Gateway LXC       │
+                    │                        │
+                    │      cloudflared       │
+                    │    Nginx Proxy Mgr     │
+                    └───────────┬────────────┘
+                                │
+                   ┌────────────┴────────────┐
+                   │                         │
+                   ▼                         ▼
+          ┌─────────────────┐      ┌─────────────────────┐
+          │  Portafolio LXC │      │ Client Hosting LXC  │
+          │                 │      │                     │
+          │      Nginx      │      │        Nginx        │
+          │    Portafolio   │      │       Sitio 1       │
+          └─────────────────┘      │       Sitio 2       │
+                                   │       Sitio 3       │
+                                   │         ...         │
+                                   └─────────────────────┘
+```
 
-                          INTERNET
-                            │
-                         Cloudflare
-                            │
-                     Cloudflare Tunnel
-                            │
-                            ▼
-                  ┌──────────────────┐
-                  │   Gateway LXC    │
-                  │                  │
-                  │ cloudflared      │
-                  │ Nginx Proxy Mgr  │
-                  └────────┬─────────┘
-                           │
-              ┌────────────┴────────────┐
-              ▼                         ▼
-      ┌─────────────────┐       ┌─────────────────────┐
-      │ Portafolio LXC   │      │ Client Hosting LXC  │
-      │                  │      │                     │
-      │ Nginx            │      │ Nginx               │
-      │ Portafolio       │      │ Site 1              │
-      └─────────────────┘       │ Site 2              │
-                                │ Site 3              │
-                                │ ...                 │
-                                └─────────────────────┘
+Esta separación permitiría mantener el portafolio como una carga de trabajo independiente mientras se incorpora posteriormente una infraestructura destinada al alojamiento de sitios de terceros.
+
+La arquitectura podría continuar ampliándose mediante la incorporación de nuevas cargas de trabajo detrás de la misma pasarela, manteniendo una separación lógica entre servicios y evitando modificar innecesariamente la infraestructura de acceso externo.
