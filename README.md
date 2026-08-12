@@ -8,10 +8,14 @@ x Instalacion inicial de proxmox
 
 
 ## DESARROLLO EN PARALELO (Mediano-largo plazo)
-o ofrecimiento servicios como desarrollador web y hosting
+o ofrecimiento servicios como desarrollador web y hostin
+
 o mejora de infraestructura de red (impplementacion de redes MESH y switches de red)
+
 o mejorar y aumenta de hardware disponible (cpu secundario, discos hdd, )
+
 o Aprendizaje y practica de SOC analyst
+
 o Practicas de pentesting (DockerLabs)
 
 
