@@ -8,7 +8,7 @@ x Instalacion inicial de proxmox
 
 
 ## DESARROLLO EN PARALELO (Mediano-largo plazo)
-o ofrecimiento servicios como desarrollador web y hostin
+o ofrecimiento de servicios como desarrollador web y hostin
 
 o mejora de infraestructura de red (impplementacion de redes MESH y switches de red)
 
