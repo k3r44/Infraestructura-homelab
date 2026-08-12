@@ -40,14 +40,8 @@ Primer proyecto destinado a implementar una infraestructura de producción para 
 
 La documentación del proyecto se divide en las siguientes áreas:
 
- * **[`README.md`] proyectos/produccion-web/README.md
+ * **[`README.md`] proyectos/infraestructura_web/README.md
   Presenta el proyecto, sus objetivos, alcance, tecnologías utilizadas, estado actual y posibles expansiones futuras.
-
-* **[`arquitectura.md`] (proyectos/produccion-web/arquitectura.md)
-  Describe la arquitectura lógica del proyecto, los componentes que lo conforman, las responsabilidades de cada uno y las decisiones tomadas durante el diseño de la infraestructura.
-
-* **[`planificacion-recursos.md`](proyectos/produccion-web/planificacion-recursos.md)**
-  Documenta la distribución y asignación de recursos computacionales, incluyendo CPU, memoria RAM y almacenamiento, así como los criterios utilizados para determinar las necesidades de cada workload.
 
 
 
