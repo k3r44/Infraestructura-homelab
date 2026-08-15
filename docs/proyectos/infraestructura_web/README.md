@@ -28,41 +28,8 @@ Un contenedor dedicado que aloja el portafolio personal.
 Redes internas entre la puerta de enlace y las cargas de trabajo de las aplicaciones.
 Monitorización básica de servicios a través del conjunto de herramientas de monitorización del *homelab*.
 
-# Arquitectura inicial
 
-El entorno de producción inicial consta de:
-
-Cloudflare Tunnel para la conectividad externa.
-Un contenedor de puerta de enlace (*gateway*) dedicado que ejecuta el cliente del túnel y el proxy inverso.
-Un contenedor dedicado que aloja el portafolio personal.
-Red interna entre la puerta de enlace y las cargas de trabajo de la aplicación.
-Monitoreo básico del servicio mediante la pila de monitoreo del *homelab*.
-Arquitectura inicial
-                         Internet
-                            │
-                            ▼
-                       Cloudflare
-                            │
-                    Cloudflare Tunnel
-                            │
-                            ▼
-                  ┌──────────────────┐
-                  │ Gateway (LXC)    │
-                  │                  │
-                  │ cloudflared      │
-                  │ Proxy inverso    │
-                  └────────┬─────────┘
-                           │
-                           ▼
-                  ┌──────────────────┐
-                  │ Portafolio (LXC) │
-                  │                  │
-                  │ Servidor web     │
-                  └──────────────────┘
-
-
-
-Tecnologías previstas
+## Tecnologías previstas
 Componente	Tecnología
 Hipervisor	Proxmox VE
 Puerta de enlace	LXC
@@ -88,4 +55,8 @@ El endurecimiento de la seguridad, la segmentación avanzada de redes, el despli
 
 ## Fase: Diseño y documentación
 
-La infraestructura aún no se ha desplegado como carga de trabajo de producción. La fase actual se centra en definir la arquitectura, la asignación de recursos, la red y los requisitos operativos antes del despliegue.
+        x La infraestructura aún no se ha desplegado como carga de trabajo de producción. La fase actual se centra en
+        definir la arquitectura, la asignación de recursos, la red y los requisitos operativos antes del despliegue.
+        Definicion de elementos que conformaran la arquitectura inicial (ver arquitectura.md)
+        X Desarrollo de diagrama C4 nivel 2 de la arquitectura general (ver ./diagrams/C2_Produccion_Web.mmd)
+        X Desarrollo de diagrama C4 nivel 3 para el contenedor gateway LXC (./diagrams/C3_LXC_Gateway.mmd)

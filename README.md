@@ -5,6 +5,7 @@ Laboratorio de computacion orientado a practicas, desarrollo, hosteo web y apren
 x Compra de hardware
 x configuracion de red (semitemporal)
 x Instalacion inicial de proxmox
+x Planteamiento de fases para desarrollo de distintos elementos de la infraestructura (ver Propuestas de Fases para la infraestructura)
 
 
 ## DESARROLLO EN PARALELO (Mediano-largo plazo)
@@ -30,15 +31,15 @@ o Practicas de pentesting (DockerLabs)
 
 
 
- # PROPUESTAS DE COMPONENTES PARA LA INFRAESTRUCTURA EN MEDIANO PLAZO:
-## Producción Web
+ # PROPUESTAS DE FASES PARA LA INFRAESTRUCTURA EN MEDIANO PLAZO:
+## Entorno Producción Web
 
 Infraestructura destinada al alojamiento y exposición de sitios web estáticos y aplicaciones web ligeras. 
 ## Estado: Diseño de arquitectura
 
 Ver documentación →
 
-##Sandbox de IA
+## Sandbox de IA
 
 Entorno destinado a experimentar con herramientas, modelos y tecnologías relacionadas con inteligencia artificial.
 
@@ -48,4 +49,6 @@ Entorno destinado a experimentar con herramientas, modelos y tecnologías relaci
 
 Stack destinado a monitorear el estado, rendimiento y disponibilidad de los diferentes componentes del homelab.
 
-## Estado: Planeado.
+## Estado: Planeado
+# Diagramas
+ Cada fase (conforme de vaya desarrollando) se realizara conforme los diagramas planteados en la documentacion, los cuales estaran tanto el el README.md de cada fase como en la carpeta /diagrams de cada una

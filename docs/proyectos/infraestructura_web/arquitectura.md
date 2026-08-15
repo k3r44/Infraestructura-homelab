@@ -27,6 +27,47 @@ La pasarela se encarga de recibir el tráfico proveniente de Cloudflare y enruta
 * Actuar como punto de entrada único para los servicios publicados externamente.
 * Reenviar las solicitudes a los servidores de aplicaciones internos.
 
+### Sistema externo de CLoudFlare Tunnels
+Este permitira exponer las paginas alojadas dentro de la maquina a la red sin tener que realizar configuraciones extra al router como aperturas de puertos, asi como una capa extra de seguridad y a su vez, siendo esta la que percibira la mayor cantidad de trabajo a la hora de querer acceder a los recursos web que se alojaran
+### LXC Gateway:
+Este se encargara de funcionar como intermedio entre el exterior y el servicio que la maquina estara alojando, este se encargara de hacer la conexion con el CLoudFlare tunnel y de distribuir el trafico sin sobrecargar el servicio, adicionalmente, en este estaran las reglas y protocolos de firewall para tener control total del tipo de trafico que este XLC dispondra.
+Arquitectura LXC Gateway en C4 nivel 3:
+
+```text
+                    
+                                    LXC GATEWAY
+                                CloudFlare Tunnel 
+                                        │
+                                        │ HTTP/HTTPS
+                                        ▼
+                                ┌───────────────────────────────────────────┐
+                                │                                           │
+                                │  ┌──────────────┐                         │
+                                │  │  cloudflared │                         │
+                                │  └──────┬───────┘                         │
+                                │         │ Trafico reenviado               │
+                                │         ▼                                 │
+                                │  ┌──────────────┐                         │
+                                │  │    Nginx     │                         │
+                                │  │ Reverse Proxy│                         │
+                                │  └──────────────┘                         │
+                                │                                           │
+                                │  ┌─────────────────────────────────────┐  │
+                                │  │              nftables               │  │
+                                │  │        Política de firewall         │  │
+                                │  └─────────────────────────────────────┘  │
+                                │                                           │
+                                └───────────────────────────────────────────┘
+                                        │
+                                        │ HTTP/HTTPS
+                                        ▼
+                                ┌───────────────┐
+                                │    Web LXC    │
+                                │               │
+                                │ Servicio web  │
+                                └───────────────┘
+```
+                              
 ### Diagrama de arquitectura
 
 ```text
@@ -58,6 +99,9 @@ La pasarela se encarga de recibir el tráfico proveniente de Cloudflare y enruta
                     │       Nginx        │
                     └────────────────────┘
 ```
+
+
+
 
 ## Decisiones de arquitectura
 ## Uso de CloudFlare Tunnels
