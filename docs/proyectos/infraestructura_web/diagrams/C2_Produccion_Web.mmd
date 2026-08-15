@@ -1,0 +1,16 @@
+C4Container
+    title Producción Web — Diagrama de Contenedores
+
+    UpdateLayoutConfig($c4ShapeInRow="1", $c4BoundaryInRow="1")
+
+    Person(usuario, "Usuario", "Persona que accede a un sitio web alojado en la infraestructura")
+
+    System_Ext(cloudflare, "Cloudflare", "Proveedor externo que gestiona DNS, protección perimetral y Cloudflare Tunnel")
+
+    Container(gateway, "Gateway de Producción", "LXC", "Punto de entrada de la infraestructura y enrutamiento hacia los sitios alojados")
+
+    Container(portfolio, "Servidor Web del Portafolio", "LXC", "Aloja y sirve los archivos estáticos del portafolio mediante Nginx")
+
+    Rel(usuario, cloudflare, "Accede al sitio web", "HTTPS")
+    Rel(cloudflare, gateway, "Establece el túnel", "Cloudflare Tunnel")
+    Rel(gateway, portfolio, "Reenvía las solicitudes", "HTTP")

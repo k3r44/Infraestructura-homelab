@@ -1,0 +1,18 @@
+C4Container
+    title Diagrama C4 - LXC Gateway y servicio Web LXC
+
+    Person(user, "Usuario Externo", "Accede al servicio a través de internet")
+    System_Ext(cloudflare, "Cloudflare Tunnel", "Enruta el tráfico desde la red global hacia el Gateway")
+
+    Container_Boundary(lxc_gateway, "LXC Gateway") {
+        Container(cloudflared, "cloudflared", "Servicio/Daemon", "Recibe el tráfico tunelizado y lo reenvía internamente")
+        Container(nginx, "Nginx Reverse Proxy", "Nginx", "Gestiona y reenvía el tráfico HTTP/HTTPS hacia el backend")
+        Container(nftables, "nftables", "Firewall", "Aplica las políticas de seguridad y filtrado de red")
+    }
+
+    Container(web_lxc, "Web LXC", "Contenedor LXC", "Servicio web interno")
+
+    Rel(user, cloudflare, "Accede mediante", "HTTPS")
+    Rel(cloudflare, cloudflared, "Tráfico tunelizado", "HTTP/HTTPS")
+    Rel(cloudflared, nginx, "Tráfico reenviado")
+    Rel(nginx, web_lxc, "Reenvía peticiones", "HTTP/HTTPS")
