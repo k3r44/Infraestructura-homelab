@@ -60,6 +60,8 @@ La pasarela se encarga de recibir el tráfico proveniente de Cloudflare y enruta
 ```
 
 ## Decisiones de arquitectura
+## Uso de CloudFlare Tunnels
+ Al ser (actualmente) un router domestico, la apertura de puertos y de trafico no esta autorizado, por lo que se tendra que usar herramientas externas que permiten la exposicion de los recursos y el trafico sin necesidad de realizar cambios en el router, siendo esta la opcion mas adecuada dados las herramientas con las cuales se dispone para el proyecto. 
 
 ### Pasarela dedicada
 
