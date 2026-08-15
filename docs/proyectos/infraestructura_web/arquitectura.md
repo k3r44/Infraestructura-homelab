@@ -166,9 +166,10 @@ La arquitectura planteada a medio y largo plazo sería similar a la siguiente:
                                   ▼
                     ┌────────────────────────┐
                     │      Gateway LXC       │
-                    │                        │
+                    │        Firewall        │
                     │      cloudflared       │
                     │    Nginx Proxy Mgr     │
+                    │                        │                         
                     └───────────┬────────────┘
                                 │
                    ┌────────────┴────────────┐
