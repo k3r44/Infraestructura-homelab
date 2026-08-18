@@ -62,13 +62,37 @@ Arquitectura LXC Gateway en C4 nivel 3:
                                         │
                                         │ HTTP/HTTPS
                                         ▼
-                                ┌───────────────┐
-                                │    Web LXC    │
-                                │               │
-                                │ Servicio web  │
-                                └───────────────┘
+                                ┌───────────────────────┐
+                                │ Portafolio Web LXC    │
+                                │                       │
+                                │ Servicio web          │
+                                └───────────────────────┘
 ```
-                              
+
+### LXC WEB
+Este contenedor no solamente tiene la responsabilidad de alojar el portafolio, ya que se necesita que este sea capaz de servir la pagina de forma adecuada al gateway y tener las suficientes herramientas para no colapsar durante el proceso, por lo cual este contenedor dispondra de nginx como un proxy inverso que servira la pagina al menciondado, por elementos de mera seguridad, este contenedor dispondra tambien de sus propias politicas de firewall usando nftables para mantener solo la comunicacion con los puertos necesarios en la direccion requerida (entrada/salida) adicionalmente (como elemento fundamental de la fase #3 de este desarrollo) se le agregara a este y a todos los contenedores y vm que se utilicen Node_exporter para tener disponible informacion general acerca del estado de la maquina.
+Arquitectura LXC Portafolio en C4 nivel 3:
+
+                                        LXC WEB
+                         ┌─────────────────────────────────────────────────┐
+                         │  ┌──────────────┐            ┌──────────────┐   │           
+                         │  │    Nginx     │            │ node_exporter│   │          
+                         │  │  Web Server  │            │ monitoring   │   │            
+                         │  └──────┬───────┘            └──────────────┘   │                   
+                         │         │                                       │
+                         │         ▼                                       │
+                         │  ┌────────────────┐                             │
+                         │  │  Portafolio    │                             │
+                         │  │Web Application │                             │
+                         │  └────────────────┘                             │
+                         │                                                 │                           
+                         │                                                 │
+                         │  ┌─────────────────────────────────────┐        │
+                         │  │              nftables               │        │
+                         │  │        Política de firewall         │        │
+                         │  └─────────────────────────────────────┘        │
+                         │                                                 │
+                         └─────────────────────────────────────────────────┘
 ### Diagrama de arquitectura
 
 ```text

@@ -1,0 +1,11 @@
+C4Container
+    title Diagrama C4 - LXC Web
+
+    Container_Boundary(lxc_web, "LXC Portafolio WEB") {
+        Container(nginx, "Nginx", "Web Server", "Servidor web que sirve la aplicación")
+        Container(portfolio, "Portafolio", "Web Application", "Aplicación web del portafolio")
+        Container(node_exporter, "node_exporter", "monitoring", "Recopila métricas del sistema para monitoreo")
+        Container(nftables, "nftables", "Política de firewall", "Aplica las políticas de seguridad y filtrado de red")
+    }
+
+    Rel(nginx, portfolio, "Sirve / Reenvía a")
