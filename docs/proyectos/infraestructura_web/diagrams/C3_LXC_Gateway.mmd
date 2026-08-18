@@ -8,6 +8,7 @@ C4Container
         Container(cloudflared, "cloudflared", "Servicio/Daemon", "Recibe el tráfico tunelizado y lo reenvía internamente")
         Container(nginx, "Nginx Reverse Proxy", "Nginx", "Gestiona y reenvía el tráfico HTTP/HTTPS hacia el backend")
         Container(nftables, "nftables", "Firewall", "Aplica las políticas de seguridad y filtrado de red")
+        Container(node_exporter, "Node_Exporter", "monitoring", "Recopila métricas del sistema para monitoreo")
     }
 
     Container(web_lxc, "Web LXC", "Contenedor LXC", "Servicio web interno")

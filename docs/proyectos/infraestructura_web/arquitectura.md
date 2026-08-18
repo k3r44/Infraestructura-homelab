@@ -40,24 +40,25 @@ Arquitectura LXC Gateway en C4 nivel 3:
                                         │
                                         │ HTTP/HTTPS
                                         ▼
-                                ┌───────────────────────────────────────────┐
-                                │                                           │
-                                │  ┌──────────────┐                         │
-                                │  │  cloudflared │                         │
-                                │  └──────┬───────┘                         │
-                                │         │ Trafico reenviado               │
-                                │         ▼                                 │
-                                │  ┌──────────────┐                         │
-                                │  │    Nginx     │                         │
-                                │  │ Reverse Proxy│                         │
-                                │  └──────────────┘                         │
-                                │                                           │
-                                │  ┌─────────────────────────────────────┐  │
-                                │  │              nftables               │  │
-                                │  │        Política de firewall         │  │
-                                │  └─────────────────────────────────────┘  │
-                                │                                           │
-                                └───────────────────────────────────────────┘
+                                ┌─────────────────────────────────────────────────┐
+                                │                             ┌────────────────┐  │
+                                │  ┌──────────────┐           │  Node_Exporter │  │
+                                │  │  cloudflared │           │ monitoring     │  │
+                                │  └──────┬───────┘           └────────────────┘  │
+                                │         │ Trafico reenviado                     │
+                                │         ▼                                       │
+                                │  ┌──────────────┐                               │             
+                                │  │    Nginx     │                               │
+                                │  │ Reverse Proxy│                               │
+                                │  └──────────────┘                               │   
+                                │                                                 │
+                                │                                                 │
+                                │  ┌─────────────────────────────────────┐        │
+                                │  │              nftables               │        │
+                                │  │        Política de firewall         │        │
+                                │  └─────────────────────────────────────┘        │
+                                │                                                 │
+                                └─────────────────────────────────────────────────┘
                                         │
                                         │ HTTP/HTTPS
                                         ▼
@@ -189,3 +190,12 @@ La arquitectura planteada a medio y largo plazo sería similar a la siguiente:
 Esta separación permitiría mantener el portafolio como una carga de trabajo independiente mientras se incorpora posteriormente una infraestructura destinada al alojamiento de sitios de terceros.
 
 La arquitectura podría continuar ampliándose mediante la incorporación de nuevas cargas de trabajo detrás de la misma pasarela, manteniendo una separación lógica entre servicios y evitando modificar innecesariamente la infraestructura de acceso externo.
+
+
+
+
+
+                                  ┌────────────────┐                               
+                                  │ Node Exporter  │                               
+                                  │ monitoring     │                               
+                                  └────────────────┘ 
