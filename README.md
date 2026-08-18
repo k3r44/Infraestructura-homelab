@@ -3,8 +3,11 @@ Laboratorio de computacion orientado a practicas, desarrollo, hosteo web y apren
 
 ## ESTADO ACTUAL
 x Compra de hardware
+
 x configuracion de red (semitemporal)
+
 x Instalacion inicial de proxmox
+
 x Planteamiento de fases para desarrollo de distintos elementos de la infraestructura (ver Propuestas de Fases para la infraestructura)
 
 
