@@ -37,7 +37,11 @@
 - Hostname definido correctamente.
 - Sistema base operativo.
 - Gestión desde Proxmox UI y acceso seguro por SSH.
-- Se mantiene registro de cambios y tareas operativas.
+- Se mantiene registro de cambios y tareas operativas
+
+
+## Gestion de Actualizaciones
+Las actualizaciones son siempre elementales en los sistemas de infraestructura, por lo que se tuvo que revisar los repositorios y gestores de paquetes que se usarian para el entorno de proxmox, al ser un sistema que no tiene una suscripcion del sistema de proxmox, se tuvieron que cambiar los repositorios para trabajar con las opciones que no la requieren.
 
 ## Estado actual
 
