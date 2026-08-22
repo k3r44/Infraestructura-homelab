@@ -54,4 +54,5 @@ Stack destinado a monitorear el estado, rendimiento y disponibilidad de los dife
 
 ## Estado: Planeado
 # Diagramas
- Cada fase (conforme de vaya desarrollando) se realizara conforme los diagramas planteados en la documentacion, los cuales estaran tanto el el README.md de cada fase como en la carpeta /diagrams de cada una
+ Cada fase (conforme de vaya desarrollando) se realizara conforme los diagramas planteados en la documentacion, los cuales estaran tanto el el README.md de cada fase como en la carpeta /diagrams de cada una de las fases del diagramado en formato C4, los diagramas presentados muestran los niveles C2 y C3 de los elementos que formaran parte de la infraestructura
+ 
