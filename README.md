@@ -38,9 +38,7 @@ o Practicas de pentesting (DockerLabs)
 ## Entorno Producción Web
 
 Infraestructura destinada al alojamiento y exposición de sitios web estáticos y aplicaciones web ligeras. 
-## Estado: Diseño de arquitectura
-
-Ver documentación →
+## Estado: en desarrollo 
 
 ## Sandbox de IA
 
