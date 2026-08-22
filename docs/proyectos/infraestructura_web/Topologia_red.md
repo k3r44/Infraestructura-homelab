@@ -128,7 +128,7 @@ La arquitectura estará compuesta por dos LXC principales:
                 ▼                     ▼
           ┌────────────┐       ┌────────────┐
           │ Gateway LXC│       │PortfolioLXC│
-          │ .0.121     │       │ .0122      │
+          │ .0.121     │       │ .0.122     │
           └────────────┘       └────────────┘
 ```
 
