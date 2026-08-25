@@ -41,7 +41,10 @@
 
 ## PKI y certificados TLS
 
-La transmisión de información entre los servicios del laboratorio se protegerá mediante certificados TLS emitidos por una PKI interna.
+La transmisión de información entre los servicios del laboratorio se protegerá
+mediante certificados TLS emitidos por una PKI interna. Esta sección define la
+política general de confianza; cada proyecto documentará su propia aplicación,
+identidades, nombres y flujo de comunicación.
 
 ### Jerarquía de confianza
 
@@ -58,25 +61,25 @@ La transmisión de información entre los servicios del laboratorio se proteger�
                  ┌─────────────────────┐
                  │  INTERMEDIATE CA    │
                  │                     │
-                 │     Operativa       │
+                 │  Futura emisora    │
                  └──────────┬──────────┘
                             │
-          ┌─────────────────┼─────────────────┐
-          │                 │                 │
-          ▼                 ▼                 ▼
-       Gateway           Portfolio          IA sandbox
-        LXC                LXC                VM
-          │                 │                 │
-          │                 │                 │
-       TLS cert          TLS cert          TLS cert
+                                   ┌─────────────────┼─────────────────┐
+                                   │                 │                 │
+                                   ▼                 ▼                 ▼
+                      Servicio          Servicio          Servicio
+                            web A             web B             futuro
+                      TLS cert          TLS cert          TLS cert
 ```
 
-- `Root CA`: autoridad raíz de confianza, mantenida fuera de los servicios y utilizada solo para firmar la CA intermedia, este se implementara en una maquina temporal.
-- `Intermediate CA`: autoridad emisora para los certificados de los servicios del laboratorio.
-- `Gateway LXC`: certificado TLS para el punto de entrada y terminación de conexiones seguras.
-- `Portfolio LXC`: certificado TLS para el servicio de portfolio.
-- `IA VM`: certificado TLS para el servicio de inteligencia artificial.
-- Futuros servicios: deberán recibir certificados emitidos por la `Intermediate CA` y no por la `Root CA` directamente.
+- `Root CA`: autoridad raíz de confianza, mantenida offline y utilizada solo
+       para firmar la futura `Intermediate CA`.
+- `Intermediate CA`: autoridad emisora prevista para los certificados de los
+       servicios del laboratorio.
+- Servicios: deberán recibir certificados emitidos por la `Intermediate CA` y
+       nunca directamente por la `Root CA`.
+- Cada proyecto deberá documentar sus nombres DNS, direcciones IP, servicios y
+       requisitos TLS en su propio apartado de seguridad.
 
 ### KPIs manuales de control
 
@@ -94,16 +97,18 @@ La transmisión de información entre los servicios del laboratorio se proteger�
 - La clave privada de la `Root CA` debe permanecer offline y no instalarse en los servicios.
 - Los servicios deben confiar en la cadena `Root CA -> Intermediate CA -> certificado del servicio`.
 - Cada certificado debe incluir el nombre DNS o la dirección IP que utilizarán los clientes.
-- No se deben reutilizar claves privadas entre `Gateway`, `Portfolio`, `IA` y futuros servicios.
+- No se deben reutilizar claves privadas entre servicios.
+- Las claves privadas deben protegerse con permisos restrictivos y no deben
+       almacenarse en el repositorio.
 - La emisión, renovación y revocación de certificados se registrará en la bitácora del laboratorio.
 
 ## Estado actual
 
 - Host Proxmox con política de seguridad mínima establecida.
-- Acceso remotos restringido y orientado a administración controlada.
-- PKI interna definida para proteger la transmisión TLS de los servicios actuales y futuros.
-- Desarrollo de la arquitectura y tencnologias a desarrollar para el PKI empezando por el root de las CA 
-- Definicion de tiempo util de los CA
+- Acceso remoto restringido y orientado a administración controlada.
+- PKI interna definida como arquitectura y política general del laboratorio.
+- Root CA en preparación para generar las primeras llaves de prueba.
+- Intermediate CA y certificados de servicio todavía no creados.
 - Base de seguridad definida para la fase inicial del laboratorio.
 
 
