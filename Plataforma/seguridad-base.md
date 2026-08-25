@@ -71,7 +71,7 @@ La transmisión de información entre los servicios del laboratorio se proteger�
        TLS cert          TLS cert          TLS cert
 ```
 
-- `Root CA`: autoridad raíz de confianza, mantenida fuera de los servicios y utilizada solo para firmar la CA intermedia.
+- `Root CA`: autoridad raíz de confianza, mantenida fuera de los servicios y utilizada solo para firmar la CA intermedia, este se implementara en una maquina temporal.
 - `Intermediate CA`: autoridad emisora para los certificados de los servicios del laboratorio.
 - `Gateway LXC`: certificado TLS para el punto de entrada y terminación de conexiones seguras.
 - `Portfolio LXC`: certificado TLS para el servicio de portfolio.
@@ -102,6 +102,7 @@ La transmisión de información entre los servicios del laboratorio se proteger�
 - Host Proxmox con política de seguridad mínima establecida.
 - Acceso remotos restringido y orientado a administración controlada.
 - PKI interna definida para proteger la transmisión TLS de los servicios actuales y futuros.
+- Desarrollando las kpis internas del sistema 
 - Base de seguridad definida para la fase inicial del laboratorio.
 
 
