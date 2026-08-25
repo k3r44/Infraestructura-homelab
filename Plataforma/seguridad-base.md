@@ -102,7 +102,8 @@ La transmisión de información entre los servicios del laboratorio se proteger�
 - Host Proxmox con política de seguridad mínima establecida.
 - Acceso remotos restringido y orientado a administración controlada.
 - PKI interna definida para proteger la transmisión TLS de los servicios actuales y futuros.
-- Desarrollando las kpis internas del sistema 
+- Desarrollo de la arquitectura y tencnologias a desarrollar para el PKI empezando por el root de las CA 
+- Definicion de tiempo util de los CA
 - Base de seguridad definida para la fase inicial del laboratorio.
 
 
