@@ -114,7 +114,7 @@ Arquitectura LXC Portafolio en C4 nivel 3:
                     │  Nginx Proxy Mgr   │
                     └─────────┬──────────┘
                               │
-                         Red interna
+                         HTTPS
                               │
                               ▼
                     ┌────────────────────┐
