@@ -46,6 +46,29 @@ mediante certificados TLS emitidos por una PKI interna. Esta sección define la
 política general de confianza; cada proyecto documentará su propia aplicación,
 identidades, nombres y flujo de comunicación.
 
+La PKI se creó exclusivamente para proteger las comunicaciones entre los
+servicios del homelab y no interviene sobre la red doméstica. La Root CA se
+generó en una VM Debian independiente, destinada a permanecer apagada cuando no
+sea necesaria.
+
+### Implementación de la Root CA
+
+- **Nombre:** `K3R4 Homelab Root CA`.
+- **Algoritmo de clave:** ECDSA.
+- **Curva elíptica:** P-384 (`secp384r1`).
+- **Algoritmo de firma:** ECDSA con SHA-384.
+- **Validez:** 10 años.
+- **Usos:** firma de certificados y listas de revocación (CRL).
+- **Restricciones de CA:** `CA:TRUE` y `pathlen:1`.
+
+La clave privada se almacenó en `/root/pki/private/root-ca.key` con permisos
+`600`, restringiendo su acceso al usuario `root`. El certificado público se
+generó en `/root/pki/certs/root-ca.crt`.
+
+El certificado fue inspeccionado mediante OpenSSL, verificando la identidad de
+la autoridad, ECDSA P-384, la firma ECDSA con SHA-384, las restricciones de CA,
+los permisos de firma de certificados y CRL y el periodo de validez.
+
 ### Jerarquía de confianza
 
 ```text
@@ -102,12 +125,18 @@ identidades, nombres y flujo de comunicación.
        almacenarse en el repositorio.
 - La emisión, renovación y revocación de certificados se registrará en la bitácora del laboratorio.
 
+### Estado de la PKI
+
+- Root CA creada, verificada y almacenada de forma segura.
+- Root CA mantenida fuera de línea cuando no se utiliza.
+- Intermediate CA y certificados de servicio todavía pendientes.
+
 ## Estado actual
 
 - Host Proxmox con política de seguridad mínima establecida.
 - Acceso remoto restringido y orientado a administración controlada.
 - PKI interna definida como arquitectura y política general del laboratorio.
-- Root CA en preparación para generar las primeras llaves de prueba.
+- Root CA creada y verificada en una VM Debian independiente.
 - Intermediate CA y certificados de servicio todavía no creados.
 - Base de seguridad definida para la fase inicial del laboratorio.
 

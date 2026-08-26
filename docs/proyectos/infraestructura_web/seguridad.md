@@ -2,7 +2,7 @@
 
 ## 1. Alcance de la primera fase
 
-La primera fase de seguridad se centra en preparar una PKI interna manual para
+La primera fase de seguridad se centra en desplegar una PKI interna manual para
 cifrar, en una etapa posterior, la comunicación entre los contenedores LXC de
 producción. El objetivo inicial es proteger el salto entre el **Gateway LXC**
 (`192.168.0.121`) y el **Portfolio LXC** (`192.168.0.122`), evitando que las
@@ -11,6 +11,10 @@ solicitudes internas viajen como HTTP en texto claro.
 El acceso público seguirá terminando en Cloudflare y el Gateway continuará
 siendo el único punto de entrada de la infraestructura. La PKI interna no
 sustituye el cifrado del tramo usuario → Cloudflare ni el del Cloudflare Tunnel.
+
+La política general y la implementación de la PKI se documentan en
+[Seguridad base del host Proxmox](../../../Plataforma/seguridad-base.md). Este
+documento se limita a la aplicación de esa PKI en la infraestructura web.
 
 ### Objetivos
 
@@ -45,7 +49,7 @@ La arquitectura final utilizará una jerarquía de dos niveles:
               certificado       certificado
 ```
 
-En el estado actual únicamente se está preparando la **Root CA**. La
+En el estado actual la **Root CA** ya fue creada y verificada. La
 **Intermediate CA** y los certificados de los servicios todavía no han sido
 creados.
 
@@ -64,21 +68,18 @@ creados.
 - La creación de claves, certificados y huellas digitales se registrará sin
   guardar contraseñas ni material privado.
 
-## 3. Parámetros criptográficos iniciales
+## 3. Parámetros TLS de los servicios web
 
-| Elemento | Parámetro previsto |
+| Elemento | Parámetro |
 |---|---|
-| Algoritmo de la Root CA | RSA de 4096 bits |
 | Algoritmo de certificados de servicio | RSA de 2048 bits |
-| Algoritmo de firma | SHA-256 |
 | Protocolos TLS | TLS 1.2 y TLS 1.3 |
-| Vigencia prevista de la Root CA | 10 años |
 | Vigencia prevista de la Intermediate CA | 5 años |
 | Vigencia prevista del certificado de servicio | 90 días |
 
-Estos valores son parámetros iniciales de diseño y se confirmarán antes de la
-emisión de los primeros certificados de prueba. La vigencia corta de los
-certificados de servicio limitará el impacto de una clave comprometida.
+Los parámetros de los certificados de servicio se confirmarán antes de su
+primera emisión. La vigencia corta de estos certificados limitará el impacto de
+una clave comprometida.
 
 ## 4. Estructura de trabajo prevista
 
@@ -106,58 +107,14 @@ Los directorios `private/` tendrán permisos restrictivos y la carpeta completa
 de trabajo no se subirá al repositorio. Solo podrán conservarse en el proyecto
 los certificados públicos y la documentación, cuando sea necesario.
 
-## 5. Preparación de la Root CA
+## 5. Próximas etapas de TLS web
 
-La Root CA es el punto máximo de confianza de la PKI. Antes de generar sus
-llaves de prueba se debe confirmar:
-
-- Nombre distintivo de la autoridad: `Homelab K3R4 Root CA`.
-- Algoritmo y longitud de la llave: RSA de 4096 bits.
-- Algoritmo de firma: SHA-256.
-- Uso de la llave: firma de autoridades certificadoras subordinadas.
-- Protección de la llave privada mediante cifrado y una contraseña que no se
-  almacene en archivos ni en la bitácora.
-- Ubicación de trabajo aislada de los LXC y del tráfico de producción.
-- Generación y conservación de la huella digital del certificado público.
-
-La configuración de la autoridad debe utilizar las extensiones reservadas para
-una CA, especialmente `basicConstraints` con `CA:TRUE` y `pathLenConstraint`,
-además de `keyUsage` con `keyCertSign` y `cRLSign`. Estas extensiones evitan
-confundir la Root CA con un certificado de servidor.
-
-La primera prueba consistirá en generar la llave privada y el certificado
-autofirmado de la Root CA, revisar sus fechas, su sujeto, sus extensiones y su
-huella digital. Hasta completar esa revisión, no se copiará ningún archivo a
-los LXC.
-
-## 6. Próximas etapas de la PKI
-
-1. Generar y revisar las llaves de prueba de la Root CA.
-2. Guardar la llave privada cifrada y retirar la Root CA del entorno de red.
-3. Crear una solicitud para la Intermediate CA y firmarla con la Root CA.
-4. Generar la llave y la solicitud del certificado del Portfolio.
-5. Emitir el certificado del Portfolio con `serverAuth` y SAN para
+1. Crear una solicitud para la Intermediate CA y firmarla con la Root CA.
+2. Generar la llave y la solicitud del certificado del Portfolio.
+3. Emitir el certificado del Portfolio con `serverAuth` y SAN para
    `portfolio.home.arpa` y `192.168.0.122`.
-6. Configurar Nginx para usar TLS y validar la cadena de confianza.
-7. Probar el flujo Gateway → Portfolio y registrar el resultado.
+4. Configurar Nginx para usar TLS y validar la cadena de confianza.
+5. Probar el flujo Gateway → Portfolio y registrar el resultado.
 
 La emisión de certificados de servicio no se considera iniciada hasta que la
-Root CA esté creada, verificada y almacenada de forma segura.
-
-## 7. Criterios de aceptación de la etapa actual
-
-- La Root CA tiene una llave RSA de 4096 bits protegida con cifrado.
-- El certificado de la Root CA es autofirmado y utiliza SHA-256.
-- Las extensiones indican que se trata de una autoridad certificadora.
-- La huella digital del certificado público está registrada.
-- La llave privada no está dentro de ningún LXC ni del repositorio.
-- La fecha de creación, la vigencia y el responsable de la prueba están
-  registrados.
-
-## Estado
-
-**Fase actual:** preparación de la estructura PKI y generación de las primeras
-llaves de prueba de la Root CA.
-
-**Siguiente paso:** validar el certificado autofirmado de la Root CA y definir
-el procedimiento para crear la Intermediate CA.
+Intermediate CA esté creada, verificada y almacenada de forma segura.
