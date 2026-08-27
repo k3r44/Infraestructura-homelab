@@ -129,7 +129,9 @@ los permisos de firma de certificados y CRL y el periodo de validez.
 
 - Root CA creada, verificada y almacenada de forma segura.
 - Root CA mantenida fuera de línea cuando no se utiliza.
-- Intermediate CA y certificados de servicio todavía pendientes.
+- Intermediate CA montada en el LXC intermedio y preparada para completar la firma de certificados.
+- Firewall del host en preparación para permitir únicamente el tráfico necesario de la CA intermedia durante la fase de emisión.
+- Certificados de servicio pendientes de emisión una vez se complete la validación final de la firma.
 
 ## Estado actual
 
@@ -137,7 +139,8 @@ los permisos de firma de certificados y CRL y el periodo de validez.
 - Acceso remoto restringido y orientado a administración controlada.
 - PKI interna definida como arquitectura y política general del laboratorio.
 - Root CA creada y verificada en una VM Debian independiente.
-- Intermediate CA y certificados de servicio todavía no creados.
-- Base de seguridad definida para la fase inicial del laboratorio.
+- Intermediate CA ya montada y lista para preparar su firma dentro del LXC intermedio.
+- Firewall del entorno en fase de preparación para dejar acceso controlado a la CA intermedia y permitir la emisión futura de certificados TLS.
+- Base de seguridad definida para la fase inicial del laboratorio, con la PKI ya avanzando hacia el estado de emisión real.
 
 

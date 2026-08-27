@@ -50,8 +50,11 @@ La arquitectura final utilizará una jerarquía de dos niveles:
 ```
 
 En el estado actual la **Root CA** ya fue creada y verificada. La
-**Intermediate CA** y los certificados de los servicios todavía no han sido
-creados.
+**Intermediate CA** ya está montada en el LXC intermedio y queda preparada para
+completar la fase de firma. El firewall del entorno está siendo ajustado para
+permitir únicamente el tráfico necesario y dejar que la CA intermedia pueda
+emitir certificados TLS en una fase posterior, sin ampliar la superficie de
+exposición de la red.
 
 ### Reglas de seguridad
 
@@ -109,12 +112,15 @@ los certificados públicos y la documentación, cuando sea necesario.
 
 ## 5. Próximas etapas de TLS web
 
-1. Crear una solicitud para la Intermediate CA y firmarla con la Root CA.
-2. Generar la llave y la solicitud del certificado del Portfolio.
-3. Emitir el certificado del Portfolio con `serverAuth` y SAN para
+1. Preparar y reforzar el firewall del entorno para dejar únicamente el tráfico
+   necesario a la Intermediate CA dentro de la red interna.
+2. Completar la configuración de la Intermediate CA y firmarla con la Root CA.
+3. Generar la llave y la solicitud del certificado del Portfolio.
+4. Emitir el certificado del Portfolio con `serverAuth` y SAN para
    `portfolio.home.arpa` y `192.168.0.122`.
-4. Configurar Nginx para usar TLS y validar la cadena de confianza.
-5. Probar el flujo Gateway → Portfolio y registrar el resultado.
+5. Configurar Nginx para usar TLS y validar la cadena de confianza.
+6. Probar el flujo Gateway → Portfolio y registrar el resultado.
 
 La emisión de certificados de servicio no se considera iniciada hasta que la
-Intermediate CA esté creada, verificada y almacenada de forma segura.
+Intermediate CA esté creada, verificada, protegida por el firewall y almacenada
+de forma segura.
