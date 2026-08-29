@@ -90,11 +90,11 @@ los permisos de firma de certificados y CRL y el periodo de validez.
                  └──────────┬──────────┘
                             │
           ┌─────────────────┼─────────────────┐
-                                   │                 │                 │
-                                   ▼                 ▼                 ▼
-                      Servicio          Servicio          Servicio
-                            web A             web B             futuro
-                      TLS cert          TLS cert          TLS cert
+          │                 │                 │
+          ▼                 ▼                 ▼
+      Servicio          Servicio          Servicio
+       web A             web B             futuro
+     TLS cert          TLS cert          TLS cert
 ```
 
 - `Root CA`: autoridad raíz de confianza, mantenida offline y utilizada solo
