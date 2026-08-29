@@ -41,7 +41,7 @@
 
 ## PKI y certificados TLS
 
-La transmisión de información entre los servicios del laboratorio se protegerá
+La transmisión de información entre los servicios del laboratorio se protege
 mediante certificados TLS emitidos por una PKI interna. Esta sección define la
 política general de confianza; cada proyecto documentará su propia aplicación,
 identidades, nombres y flujo de comunicación.
@@ -49,7 +49,9 @@ identidades, nombres y flujo de comunicación.
 La PKI se creó exclusivamente para proteger las comunicaciones entre los
 servicios del homelab y no interviene sobre la red doméstica. La Root CA se
 generó en una VM Debian independiente, destinada a permanecer apagada cuando no
-sea necesaria.
+sea necesaria. La Intermediate CA se generó y validó correctamente en el LXC
+correspondiente y ya quedó autorizada para firmar certificados de servicio para
+los demás LXC del laboratorio.
 
 ### Implementación de la Root CA
 
@@ -87,7 +89,7 @@ los permisos de firma de certificados y CRL y el periodo de validez.
                  │  Futura emisora    │
                  └──────────┬──────────┘
                             │
-                                   ┌─────────────────┼─────────────────┐
+          ┌─────────────────┼─────────────────┐
                                    │                 │                 │
                                    ▼                 ▼                 ▼
                       Servicio          Servicio          Servicio
@@ -129,9 +131,10 @@ los permisos de firma de certificados y CRL y el periodo de validez.
 
 - Root CA creada, verificada y almacenada de forma segura.
 - Root CA mantenida fuera de línea cuando no se utiliza.
-- Intermediate CA montada en el LXC intermedio y preparada para completar la firma de certificados.
-- Firewall del host en preparación para permitir únicamente el tráfico necesario de la CA intermedia durante la fase de emisión.
-- Certificados de servicio pendientes de emisión una vez se complete la validación final de la firma.
+- Intermediate CA creada y validada correctamente; sus certificados son correctos y quedan emitidos por la cadena de confianza adecuada.
+- Intermediate CA ya autorizada para firmar certificados TLS para los LXC del laboratorio y servicios asociados.
+- Firewall del host preparado para permitir únicamente el tráfico necesario de la CA intermedia durante la fase de emisión.
+- Certificados de servicio en proceso de emisión y validación conforme a la nueva autoridad emisora.
 
 ## Estado actual
 
@@ -139,8 +142,8 @@ los permisos de firma de certificados y CRL y el periodo de validez.
 - Acceso remoto restringido y orientado a administración controlada.
 - PKI interna definida como arquitectura y política general del laboratorio.
 - Root CA creada y verificada en una VM Debian independiente.
-- Intermediate CA ya montada y lista para preparar su firma dentro del LXC intermedio.
-- Firewall del entorno en fase de preparación para dejar acceso controlado a la CA intermedia y permitir la emisión futura de certificados TLS.
-- Base de seguridad definida para la fase inicial del laboratorio, con la PKI ya avanzando hacia el estado de emisión real.
+- Intermediate CA generada, validada y ya autorizada para firmar certificados para los demás LXC del entorno.
+- Firewall del entorno ajustado para permitir el tráfico necesario de la CA intermedia y facilitar la emisión de certificados TLS.
+- Base de seguridad definida para la fase inicial del laboratorio, con la PKI ya operativa para la emisión real de certificados en los LXC.
 
 
