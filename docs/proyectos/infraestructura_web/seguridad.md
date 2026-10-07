@@ -50,11 +50,10 @@ La arquitectura final utilizará una jerarquía de dos niveles:
 ```
 
 En el estado actual la **Root CA** ya fue creada y verificada. La
-**Intermediate CA** ya está montada en el LXC intermedio y queda preparada para
-completar la fase de firma. El firewall del entorno está siendo ajustado para
-permitir únicamente el tráfico necesario y dejar que la CA intermedia pueda
-emitir certificados TLS en una fase posterior, sin ampliar la superficie de
-exposición de la red.
+**Intermediate CA** ya está montada en el LXC intermedio y preparada para
+firmar certificados. El certificado TLS del **Gateway LXC** ya fue emitido y se
+encuentra funcionando correctamente. El firewall del entorno permite únicamente
+el tráfico necesario para la CA intermedia y para la operación del servicio.
 
 ### Reglas de seguridad
 
