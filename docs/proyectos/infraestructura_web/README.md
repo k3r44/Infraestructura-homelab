@@ -53,10 +53,18 @@ El endurecimiento de la seguridad, la segmentación avanzada de redes, el despli
 
 # Estado actual
 
-## Fase: Diseño y documentación
+## Fase: Implementación inicial del Gateway
 
-        x La infraestructura aún no se ha desplegado como carga de trabajo de producción. La fase actual se centra en
-        definir la arquitectura, la asignación de recursos, la red y los requisitos operativos antes del despliegue.
-        Definicion de elementos que conformaran la arquitectura inicial (ver arquitectura.md)
-        X Desarrollo de diagrama C4 nivel 2 de la arquitectura general (ver ./diagrams/C2_Produccion_Web.mmd)
-        X Desarrollo de diagrama C4 nivel 3 para el contenedor gateway LXC (./diagrams/C3_LXC_Gateway.mmd)
+La infraestructura ha pasado de diseño a implementación. Nginx está
+instalado y habilitado en el Gateway, con HTTPS y redirección HTTP probados
+localmente. Este avance no significa que el Gateway esté desplegado y
+operativo como reverse proxy: el backend del portafolio y varios componentes
+de acceso, seguridad y monitorización siguen pendientes. El detalle de las
+pruebas y sus límites está en [desplieque.md](desplieque.md).
+
+- Arquitectura inicial y asignación de recursos documentadas.
+- Diagramas C4 de nivel 2 y nivel 3 desarrollados.
+- Nginx y HTTPS configurados y verificados localmente en el Gateway.
+- Pendientes: revisar y probar `nftables`, instalar Node Exporter y
+        Cloudflare Tunnel, distribuir la CA raíz y validar el acceso desde otro
+        equipo de la LAN.
